@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #login-container, #app-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #d4edda;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="app-container" style="display: none;">
+        <h1>Medicine Reminder</h2>
+        <input type="text" id="medicine-name" placeholder="Medicine Name">
+            <h4> start date</h4>
+        <input  type="date" id="start-date" >
+        <h4> end date</h4>
+        <input type="date" id="end-date">
+        <h4> time</h4>
+        <input type="time" id="time-to-take">
+        <button onclick="addMedicine()">Add Medicine</button>
+        
+        <h3>Medicine Schedule</h3>
+        <ul id="medicine-list"></ul>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            if (username === "user" && password === "password") {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("app-container").style.display = "block";
+            } else {
+                alert("Invalid credentials!");
+            }
+        }
+
+        function addMedicine() {
+            const name = document.getElementById("medicine-name").value;
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+            const time = document.getElementById("time-to-take").value;
+            
+            if (name && startDate && endDate && time) {
+                const medicineList = document.getElementById("medicine-list");
+                const li = document.createElement("li");
+                li.textContent = `${name} - ${startDate} to ${endDate} at ${time}`;
+                medicineList.appendChild(li);
+                
+                scheduleReminder(name, time);
+            } else {
+                alert("Please fill in all fields");
+            }
+        }
+
+        function scheduleReminder(name, time) {
+            const now = new Date();
+            const [hour, minute] = time.split(":").map(Number);
+            const reminderTime = new Date();
+            reminderTime.setHours(hour, minute, 0, 0);
+
+            const delay = reminderTime - now;
+            if (delay > 0) {
+                setTimeout(() => {
+                    alert(`Time to take your medicine: ${name}`);
+                }, delay);
+            }
+        }
+    </script>
+</body>
+</html>
